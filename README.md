@@ -346,7 +346,7 @@ The Z-scores for both variables confirm that we can reject the null hypothesis f
 
 ## Local Moran's I
 
-Local Moran's I or LISA, is different from Global Moran's I in that it provides us with a statistic for each location with an assessment of significance. The main difference between the two is that instead of providing single measures of Moran's I, expected I, variance, and z-score, LISA provides us with these statistics for every single location (i) in the dataset.
+Local Moran's I or LISA, is different from Global Moran's I in that it provides us with a statistic for each location with an assessment of significance (ESRI,2024). The main difference between the two is that instead of providing single measures of Moran's I, expected I, variance, and z-score, LISA provides us with these statistics for every single location (i) in the dataset.
 
 The calculation for Local Moran’s I has many of the same features as the global calculation, although arranged differently.
 $$
@@ -416,16 +416,24 @@ Figure 4. Kelowna census dissemination areas showing LISA z-scores for median to
 
 The above map shows that there are census tracts in Kelowna that exhibit significant distribution patterns for both median total income and percent French knowledge speakers. The red polygons represent tracts that exhibit significant clustering, and the blue polygons represent areas of significant disperion. Although these maps are great for visualizing which polygons in our study area are significantly positively or negatively spatially autocorrelated, it will be even more informative if we graph the Local Moran's I Z-values. This process is shown in the code below where we'll use the function "moran.plot()" from the "spdep" package library to create a scatterplot.
 
-```{r MoransIScatter, echo=TRUE, eval=TRUE, warning=FALSE, fig.cap= "Moran's I scatter plot for median total income."}
+```{r MoransIScatter, echo=TRUE, eval=TRUE, warning=FALSE}
 #Create Moran's I scatter plot for Income
 moran.plot(Income_noNA$`Median total income`, Income.lw, zero.policy=TRUE, spChk=NULL, labels=NULL, xlab="Median Total Income ($)", 
            ylab="Spatially Lagged Median Total Income ($)", quiet=NULL)
 ```
-```{r MoransIScatter2, echo=TRUE, eval=TRUE, warning=FALSE, fig.cap= "Moran's I scatter plot for percentage of respondants with knowledge of french."}
+<img width="1000" alt="mediantotalincomescatter" src="https://github.com/user-attachments/assets/67592213-8b06-455f-9714-e1704f2cdef2">
+
+Figure 5. Moran's I scatter plot for median total income
+
+```{r MoransIScatter2, echo=TRUE, eval=TRUE, warning=FALSE}
 #Create Moran's I scatter plot for French
 moran.plot(French_noNA$PercFrench, French.lw, zero.policy=TRUE, spChk=NULL, labels=NULL, xlab="Respondants with knowledge of French (%)", 
            ylab="Spatially Lagged knowledge of French (%)", quiet=NULL)
 ```
+<img width="1000" alt="frenchscatter" src="https://github.com/user-attachments/assets/2263a22d-99c7-4d95-a880-8313d3e8f61c">
+
+Figure 6. Moran's I scatter plot for percentage of respondants with knowledge of french
+
 In these plots, the points with diamonds are considered statistically significant, and the regression line shows the overall trend. For both plots we can see that the trend shows strong positive spatial autocorrelation, which tells us that there exists spatial clustering of these census variables in Kelowna, B.C.
 
 
