@@ -10,8 +10,9 @@ The data used in this analysis is from 2016 and is sourced from the Statistics C
 
 ### Packages & Libraries
 
+
 One of the best things about using R is that we can access a variety of open-source code packages to help us execute 
-a multitude of calculations. For example: the "tmap" package library allows us to access functions that creates map visulizations (Tennekes M., 2020),"spdep" allows us to calculate spatial staistics (Bivand R., 2020), and "knitr" allows us to embed R code within a pdf, html, or word document output (Yihuei X., 2024). With a better sense for how packages expand our capabilities in R, we can now begin by installing and calling them out from our package library using the "library()" function. Whenever we install a new package in R it will be saved to our package library, so we must simply use the "library()" function to access them at anytime. Provided below are the necessary packages for spatial autocorrelation analysis:
+a multitude of calculations. For example: the "tmap" package library allows us to access functions that creates map visualizations (Tennekes M., 2020),"spdep" allows us to calculate spatial statistics (Bivand R., 2020), and "knitr" allows us to embed R code within a pdf, html, or word document output (Yihuei X., 2024). With a better sense for how packages expand our capabilities in R, we can now begin by installing and calling them out from our package library using the "library()" function. Whenever we install a new package in R it will be saved to our package library, so we must simply use the "library()" function to access them at anytime. Provided below are the necessary packages for spatial autocorrelation analysis:
 
 ``` {r Libraries, echo=TRUE, eval=TRUE, message=FALSE, warning=FALSE}
 install.packages("st")
