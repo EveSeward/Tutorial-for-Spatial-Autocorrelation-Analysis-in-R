@@ -5,7 +5,7 @@ This tutorial uses Global Moran’s I and Local Interpretation of Spatial Autoco
 Spatial autocorrelation is a spatial analysis technique that allows us to determine whether an observation is positively correlated (nearby observations have similar values) or negatively correlated (near things have dissimilar values). This gives us an idea of the spatial distribution of the dataset indicating whether observations are distributed randomly, clustered, or dispersed. Global Moran's I is measures spatial association based on location and value simultaneously, giving us a generalized inferential statistic (ESRI, 2024). Local Moran's I or LISA, compares all values and locations within the context of all neighbouring values, providing a comprehensive statistic describing 'hotspots' and significant outliers (ESRI, 2024). In each of these tests we will examine how similar or dissimilar observations at a location (i) are from observations at neighbouring locations (j).  Spatial Autocorrelation is preferred over other measures of spatial association as it accounts for Toblers Law, which states that observations are not independent and will be influenced by observations at nearby locations (Miller H.J., 2004).
 
 ### Data 
-The data for this analysis was obtained from the Statistics Canada Open Government Portal (2016), consisting of a shapefile containing the census boundaries of multiple Canadian cities in a multi-polygon format, and a CSV file with census data. Census data is widely used in spatial analysis as it provides us with a large amount of data about population demographics, socioeconomics, and other key population factors for the regions where it is collected. In this tutorial we compare medain total income with percent French knowledge speakers to explore the relationships between French culture and socioeconomic status in our study area. These relationships are important from a census context as they influence access to resources, public policy, policing, and locations of high density immigrant populations (Statistics Canada, 2014).
+The data used in this analysis is from 2016 and was obtained from the Statistics Canada Open Government Portal, consisting of a shapefile containing the census boundaries of multiple Canadian cities in a multi-polygon format, and a CSV file with census data. Census data is widely used in spatial analysis as it provides us with a large amount of data about population demographics, socioeconomics, and other key population factors for the regions where it is collected. In this tutorial we compare medain total income with percent French knowledge speakers to explore the relationships between French culture and socioeconomic status in our study area. These relationships are important from a census context as they influence access to resources, public policy, policing, and locations of high density immigrant populations (Statistics Canada, 2014).
 
 ### Packages & Libraries
 
@@ -132,7 +132,7 @@ kable(data1, caption = paste0("Descriptive statistics for selected ", 2016, " ce
 
 ### Step 7: Map variables of interest
 
-The first step in mapping our variables of interest is by creating two ‘map objects’ called map_Income, and map_French. We use the "tmap" package to access our mapping functions. For example, "tm_shape" to tell R what variable we are mapping and the function "tm_polygons" to customize the parameters for our map design elements. Next, we will print the maps side by side for comparison, using the function "tmap_arrange". The code and output maps for median total income and percentage of population with French knowledge are shown below: 
+The first step in mapping our variables of interest is by creating two ‘map objects’ called "map_Income", and "map_French". We use the "tmap" package to access our mapping functions. For example, "tm_shape" to tell R what variable we are mapping and the function "tm_polygons" to customize the parameters for our map design elements. Next, we will print the maps side by side for comparison, using the function "tmap_arrange". The code and output maps for median total income and percentage of population with French knowledge are shown below: 
 
 ```{r StudyArea, echo=TRUE, eval=TRUE, warning=FALSE}
 
@@ -165,7 +165,7 @@ Figure 1. Kelowna census dissemination areas showing median total income (left) 
 
 ### Step 8: Calculate Queen and Rook weights
 
-In order to calculate Moran's I, we need to define which locations fall within our neighbourhood. We'll use the Queen weighting scheme to define another neighbourhood as the eight neighbouring polygons located vertically, horizontally, and diagonally from our main point (I). Then we will use the Rook weighting scheme to define a neighbourhood as the four neighbouring polygons located vertically and horizontally from our main point (I). By selecting these neighbourhoods, we can compare how either might affect our results. From this comparison, we can decide which is most suitable for our analysis.
+In order to calculate Moran's I, we need to define which locations fall within our neighbourhood. We'll use the Queen weighting scheme to define one neighbourhood as the eight neighbouring polygons located vertically, horizontally, and diagonally from our main point (i). Then we will use the Rook weighting scheme to define another neighbourhood as the four neighbouring polygons located vertically and horizontally from our main point (i). By selecting these neighbourhoods, we can compare how either might affect our results. From this comparison, we can decide which is most suitable for our analysis.
 
 ```{r Neighbours, echo=TRUE, eval=TRUE, warning=FALSE}
 #Income Neighbours - Queens weight
@@ -240,9 +240,9 @@ Figure 3. Kelowna census dissemination areas showing percent French knowledge sp
 
 ### Step 10: Create a weighted matrices
 
-By creating a weighted neighbourhood matrix we are finding how much nearby observations deviate from the mean. There is a variety of weighted matrix possibilities including, inverse distance, nearest neighbour, and contiguity (ESRI, 2024). For this analysis we are using a basic binary contiguity weighting scheme, where each neighbour is given a weight of 1, and all other polygons are given a weight of 0.
+By creating a weighted neighbourhood matrix we are finding out how much nearby observations deviate from the mean. There is a variety of weighted matrix possibilities including, inverse distance, nearest neighbour, and contiguity (ESRI, 2024). For this analysis we are using a basic binary contiguity weighting scheme, where each neighbour is given a weight of 1, and all other polygons are given a weight of 0.
 
-To create a weights matrix in R we'll use the “nb2listw" function from the “spdep” package library. We can apply this function to the Income.nb, and French.nb variables we created above, as they contain the Queen scheme neighbourhood links to which we will assign weights. To avoid any issues in running the code caused by the existence of polygons in our weights matrix file with zero neighbour links, we define “zero.policy” as equal to “TRUE”. This will assign a weight vector of zero for regions with no neighbours. To assess the distribution of weights for each observation (i) and its neighbours (j), we can print of off our list of weights matrices using the function “print(subset_weights)”. The code below uses the binary contiguity weighted scheme type "B" we used to define our weighted neighbourhoods in the previous section.
+To create a weights matrix in R we'll use the “nb2listw" function from the “spdep” package library. We can apply this function to the "Income.nb", and "French.nb" variables we created above, as they contain the Queen scheme neighbourhood links to which we will assign weights. To avoid any issues in running the code caused by the existence of polygons in our weights matrix file with zero neighbour links, we define “zero.policy” as equal to “TRUE”. This will assign a weight vector of zero for regions with no neighbours. To assess the distribution of weights for each observation (i) and its neighbours (j), we can print of off our list of weights matrices using the function “print(subset_weights)”. The code below uses the binary contiguity weighted scheme type "B" we used to define our weighted neighbourhoods in the previous section.
 
 ```{r Final weights, echo=TRUE, eval=TRUE, warning=FALSE}.
 #Create Income weights matrix
@@ -263,7 +263,7 @@ print(subset_weights)
 # Spatial Autocorrelation Statistics
 
 ## Global Moran’s I
-Now that we have chosen and created weight matrices for our neighbours, we can calculate the Global Moran’s I statistic. This method of spatial autocorrelation provides us with an idea of how correlated our data is over the entire data set, representing our spatial pattern at a global scale (ESRI, 2024). Where all observations (i) are compared with all of their neighbouring locations (j) to produce a global measure of variance, I, expected I, and z-score. These values and how they are calculated, are explained in the following section.
+Now that we have chosen and created weight matrices for our neighbours, we can calculate the Global Moran’s I statistic. This spatial autocorrelation test provides us with an idea of how correlated our data is over the entire data set, representing our spatial pattern at a global scale (ESRI, 2024). Where all observations (i) are compared with all of their neighbouring locations (j) to produce a global measure of variance, I, expected I, and z-score. These values and how they are calculated, are explained in the following section.
 
 The equation for this statistic is:
 
@@ -321,7 +321,7 @@ maxRange2 <- range[2]
 ```
 <img width="1000" alt="table3" src="https://github.com/user-attachments/assets/5394b5ac-eaa2-4aa6-ad8b-a5a1c3013028">
 
-The purpose of calculating the range of Moran's I values is to give us an idea of what values we might see for perfectly dispersed and clustered distributions for both median total income an percent French knowledge speakers. These ranges give us an idea of where our calculated Moran's I values fall within the entire range of values across the dataset, allowing us to determine the pattern of spatial distribution and the kind of spatial autocorrelation (positive or negative) that exists between the two variables.
+The purpose of calculating the range of Moran's I values is to give us an idea of what values we might see for perfectly dispersed and clustered distributions for both median total income an percent French knowledge speakers. These ranges tell us where our calculated Moran's I values fall within the entire range of values across the dataset, allowing us to determine the pattern of spatial distribution and the kind of spatial autocorrelation (positive or negative) that exists between the two variables.
 
 To go one step further, we can determine whether or not these spatial patterns are statistically significant. To do this, we use the Z-test. Here our null hypothesis is that values for median total income and percent French knowledge speakers are randomly distributed, and the alternate hypothesis is that they are not randomly distributed. Using an $\alpha$ value of 0.05 (95% confidence interval), if our Z-score falls above or below +/-1.96, we can reject the null hypothesis. A value greater than +1.96 would imply that our variables are significantly clustered, and a value less than -1.96 would imply that they are significanlty dispersed.
 
@@ -346,7 +346,7 @@ The Z-scores for both variables confirm that we can reject the null hypothesis f
 
 ## Local Moran's I
 
-Local Moran's I or LISA, is different from Global Moran's I in that it provides us with a statistic for each location with an assessment of significance (Anselin, 2020). The main difference between the two is that instead of providing single measures of Moran's I, expected I, variance, and z-score, LISA provides us with these statistics for every single location (i) in the dataset.
+Local Moran's I or LISA, is different from Global Moran's I in that it provides us with a statistic for each location with an assessment of significance. The main difference between the two is that instead of providing single measures of Moran's I, expected I, variance, and z-score, LISA provides us with these statistics for every single location (i) in the dataset.
 
 The calculation for Local Moran’s I has many of the same features as the global calculation, although arranged differently.
 $$
@@ -414,7 +414,7 @@ tmap_arrange(map_LISA_Income, map_LISA_French, ncol = 2, nrow = 1)
 
 Figure 4. Kelowna census dissemination areas showing LISA z-scores for median total income (left) and percentage of respondents with French knowledge (right).
 
-The above map shows that there are census tracts in Kelowna that exhibit significant distribution patterns for both median total income and percent French knowledge speakers. The red polygons represent tracts that exhibit significant clustering, and the blue polygons represent area of significant disperion. Although these maps are great for visualizing which polygons in our study area are significantly positively or negatively spatially autocorrelated, it will be even more informative if we graph the Local Moran's I Z-values. This process is shown in the code below where we'll use the function "moran.plot()" from the "spdep" package library to create scatterplot.
+The above map shows that there are census tracts in Kelowna that exhibit significant distribution patterns for both median total income and percent French knowledge speakers. The red polygons represent tracts that exhibit significant clustering, and the blue polygons represent areas of significant disperion. Although these maps are great for visualizing which polygons in our study area are significantly positively or negatively spatially autocorrelated, it will be even more informative if we graph the Local Moran's I Z-values. This process is shown in the code below where we'll use the function "moran.plot()" from the "spdep" package library to create a scatterplot.
 
 ```{r MoransIScatter, echo=TRUE, eval=TRUE, warning=FALSE, fig.cap= "Moran's I scatter plot for median total income."}
 #Create Moran's I scatter plot for Income
@@ -431,7 +431,7 @@ In these plots, the points with diamonds are considered statistically significan
 
 ## Summary
 
-This tutorial provides a basic introduction to spatial autocorrelation in R and provides us with the tools to assess spatial correlation and significance. Although the results of the Global and Local Moran's I tests provide valuable insights into the spatial distributions of our variables of interest, there are still opportunities to refine our results. One key observation is that census tracts increase in size from the centre of the region, which could introduce boundary effects (Griffith, D.A & Amrhein, C.G, 1983). Boundary effects come into play when census tracts have fewer neighbouring data points, as is the case in our study area. This can distort our analysis by underestimating these areas in our results and skewing significance. To address this, we could switch from a binary contiguity weighting scheme "B" to an inverse distance weighting (IDW) scheme to account for census tracts with fewer observations. Additionally, considering population density when preforming Global and Local Moran's I tests could provide further insights into the observed spatial patterns of the variables assessed in this analysis, and in effect refine our results. In short, suggested improvements include, experimenting with alternative weighting schemes to account for boundary edge effects and scaling the results to a measure of population density.
+This tutorial provides a basic introduction to spatial autocorrelation in R and explains the tools to assess spatial correlation and significance. Although the results of the Global and Local Moran's I tests offer valuable insights into the spatial distributions of our variables of interest, there are still opportunities to refine our results. One key observation is that census tracts increase in size from the centre of the region, which could introduce boundary effects (Griffith, D.A & Amrhein, C.G, 1983). Boundary effects come into play when census tracts have fewer neighbouring data points, as is the case in our study area. This can distort our analysis by underestimating these areas in our results and skewing significance. To address this, we could switch from a binary contiguity weighting scheme to an inverse distance weighting (IDW) scheme to account for census tracts with fewer observations. Additionally, considering population density when preforming Global and Local Moran's I tests could provide further insights into the observed spatial patterns of the variables assessed in this analysis, and in effect refine our results. In short, suggested improvements include: experimenting with alternative weighting schemes to account for boundary edge effects and scaling the results to a measure of population density.
 
 ## References
 
@@ -448,7 +448,7 @@ Griffith, D.A. and Amrhein, C.G. (1983). An evaluation of correction techniques 
 
 Miller, H. J. (2004). Toblers first law and spatial analysis. Annals of the Association of American Geographers, 94(2), 284–289. http://www.jstor.org/stable/3693985 
 
-Statistics Canada. (2016). Open Governement Portal. https://open.canada.ca/data/organization/statcan
+Statistics Canada. Open Governement Portal. https://open.canada.ca/data/organization/statcan
 
 Tennekes, M. (2020). tmap: thematic maps. https://CRAN.R-project.org/package=tmap, R package version
 3.1
