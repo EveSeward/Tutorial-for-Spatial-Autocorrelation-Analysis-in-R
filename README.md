@@ -161,7 +161,7 @@ tmap_arrange(map_Income, map_French, ncol = 2, nrow = 1)
 
 ```
 <img width="1000" alt="Rplot02" src="https://github.com/user-attachments/assets/2048fd60-6fb6-4f5d-9dec-06d819d9f199">
-Figure 1. Kelowna census dissemination areas showing median total income (left) and percentage of respondants with knowledge of french (right).
+Figure 1: Kelowna census dissemination areas showing median total income (left) and percentage of respondants with knowledge of french (right).
 
 ### Step 8: Calculate Queen and Rook weights
 
@@ -216,7 +216,7 @@ IncomeBoth <- tm_shape(Income_noNA) + tm_borders(col='lightgrey') +
 tmap_arrange(IncomeQueen, IncomeRook, IncomeBoth, ncol = 3, nrow = 1)
 ```
 <img width="1000" alt="Rplot04" src="https://github.com/user-attachments/assets/39771e49-ba9d-428f-a578-229e5975573d">
-Figure 2. Kelowna census dissemination areas showing median total income queens weight (left)  rooks weight (middle) and the combination of the two (right)
+Figure 2: Kelowna census dissemination areas showing median total income queens weight (left)  rooks weight (middle) and the combination of the two (right)
 
 ``` {r Neighboursmap2, echo=TRUE, eval=TRUE, warning=FALSE}
 #Make queens map french
@@ -236,7 +236,7 @@ FrenchBoth <- tm_shape(French_noNA) + tm_borders(col='lightgrey') +
 tmap_arrange(FrenchQueen, FrenchRook, FrenchBoth, ncol = 3, nrow = 1)
 ```
 <img width="1000" alt="Rplot03" src="https://github.com/user-attachments/assets/698148d9-2cb0-4378-b8d7-1be7cfd032c4">
-Figure 3. Kelowna census dissemination areas showing percent French knowledge speakers queens weight (left)  rooks weight (middle) and the combination of the two (right)
+Figure 3: Kelowna census dissemination areas showing percent French knowledge speakers queens weight (left)  rooks weight (middle) and the combination of the two (right)
 
 ### Step 10: Create a weighted matrices
 
@@ -412,7 +412,7 @@ tmap_arrange(map_LISA_Income, map_LISA_French, ncol = 2, nrow = 1)
 ```
 ![Rplot05](https://github.com/user-attachments/assets/1f0840c1-7bca-4874-80da-3704d3cf244c)
 
-Figure 4. Kelowna census dissemination areas showing LISA z-scores for median total income (left) and percentage of respondents with French knowledge (right).
+Figure 4: Kelowna census dissemination areas showing LISA z-scores for median total income (left) and percentage of respondents with French knowledge (right).
 
 The above map shows that there are census tracts in Kelowna that exhibit significant distribution patterns for both median total income and percent French knowledge speakers. The red polygons represent tracts that exhibit significant clustering, and the blue polygons represent areas of significant disperion. Although these maps are great for visualizing which polygons in our study area are significantly positively or negatively spatially autocorrelated, it will be even more informative if we graph the Local Moran's I Z-values. This process is shown in the code below where we'll use the function "moran.plot()" from the "spdep" package library to create a scatterplot.
 
@@ -423,7 +423,7 @@ moran.plot(Income_noNA$`Median total income`, Income.lw, zero.policy=TRUE, spChk
 ```
 <img width="1000" alt="mediantotalincomescatter" src="https://github.com/user-attachments/assets/67592213-8b06-455f-9714-e1704f2cdef2">
 
-Figure 5. Moran's I scatter plot for median total income
+Figure 5: Moran's I scatter plot for median total income
 
 ```{r MoransIScatter2, echo=TRUE, eval=TRUE, warning=FALSE}
 #Create Moran's I scatter plot for French
@@ -432,7 +432,7 @@ moran.plot(French_noNA$PercFrench, French.lw, zero.policy=TRUE, spChk=NULL, labe
 ```
 <img width="1000" alt="frenchscatter" src="https://github.com/user-attachments/assets/2263a22d-99c7-4d95-a880-8313d3e8f61c">
 
-Figure 6. Moran's I scatter plot for percentage of respondants with knowledge of french
+Figure 6: Moran's I scatter plot for percentage of respondants with knowledge of french
 
 In these plots, the points with diamonds are considered statistically significant, and the regression line shows the overall trend. For both plots we can see that the trend shows strong positive spatial autocorrelation, which tells us that there exists spatial clustering of these census variables in Kelowna, B.C.
 
